@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/c66be8a416.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="music-player">
+            <nav>
+                <div class="circle"><i class="fa-solid fa-angle-left"></i></div>
+                <div class="circle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </nav>
+
+            <img src="img/audio1.jpg" alt="" class="song-img">
+
+            <h1>Disfigure</h1>
+            <p>NCS</p>
+
+            <audio  id="song">
+                <source src="audio/Audio1.mp3" type="audio/mpeg">
+            </audio>
+            <input type="range" value="0" id="progress">
+
+
+            <div class="controls">
+                <div>
+                    <i class="fa-solid fa-backward" id="previous"></i>
+                </div>
+                <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+                <div>
+                    <i class="fa-solid fa-forward" id="next"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //songs
+        const cartoonAudio = new Audio('audio/audio1.mp3');
+        const audio2= new Audio(`audio/tvari-hawaii-vacation-159069.mp3`);
+        const audio3= new Audio(`audio/vinee-heights-126947.mp3`);
+        const audio4= new Audio(`audio/downfall-21371.mp3`);
+        const audio5= new Audio(`audio/tremoxbeatz-at-home-in-wendyx27s-restaurant-sad-rap-melodie-173875.mp3`);
+        const audio6= new Audio(`audio/speed-122837.mp3`);
+        const audio7= new Audio(`audio/silicon-valley-123990.mp3`);
+        const audio8= new Audio(`audio/keep-moving-on-136341.mp3`);
+        const audio9= new Audio(`audio/yo-kid-123499.mp3`);
+
+        const songs=[
+            {ele:audio2, audioName:`Tvari-Hawaii-Vacation`},
+            {ele:audio3, audioName:`vinee-heights`},
+            {ele:audio4, audioName:`downfall-21371`},
+            {ele:audio5, audioName:`tremoxbeatz-at-home-in-wendyx27s-restaurant-sad-rap-melodie`},
+
+
+    ];
+
+        //buttons
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let ctrlIcon = document.getElementById("ctrlIcon");
+        let previous=document.getElementById("previous");
+        let next=document.getElementById("next");
+
+
+
+
+        let current=0;
+        let currentSong=songs[current].ele;
+
+
+
+
+        ctrlIcon.addEventListener('click',)
+
+        song.onloadedmetadata = function () {
+            progress.max = song.duration;
+            progress.value = song.currentTime;
+        
+
+        }
+        function playPause() {
+            if (ctrlIcon.classList.contains("fa-pause")) {
+                song.pause();
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+
+            }
+            else{
+                song.play();
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+
+            }}
+
+        if (song.play()) {
+            setInterval(() => {
+                progress.value = song.currentTime;
+            }, 500);
+        }
+
+
+        progress.onchange=function(){
+            song.play();
+            song.currentTime=progress.value
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+
+        if(progress.value==progress.max){
+            ctrlIcon.classList.remove("fa-pause");
+            ctrlIcon.classList.add("fa-play");
+        }
+
+        
+       
+
+
+
+    </script>
+</body>
+
+</html>

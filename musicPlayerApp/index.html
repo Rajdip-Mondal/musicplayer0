@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/c66be8a416.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap" rel="stylesheet">;
+</head>
+
+<body>
+    <div class="container">
+        <div class="music-player">
+            <nav>
+                <div class="circle"><i class="fa-solid fa-angle-left"></i></div>
+                <div class="circle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </nav>
+
+            <img src="img/audio3.png" alt="" class="song-img">
+
+            <h1 id="songName"></h1>
+
+            <audio id="song">
+                <source src="audio/Audio1.mp3" type="audio/mpeg">
+            </audio>
+            <input type="range" value="0" id="progress">
+            <div class="timer">
+                <p id="currentTime">0:00</p>
+                <p id="duration">5:00</p>
+            </div>
+
+            <div class="controls">
+                <div>
+                    <i class="fa-solid fa-backward" id="previous"></i>
+                </div>
+                <div><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+                <div>
+                    <i class="fa-solid fa-forward" id="next"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //songs
+        const cartoonAudio = new Audio('audio/audio1.mp3');
+        const audio2 = new Audio(`audio/Disfigure - Blank _ Melodic Dubstep _ NCS - Copyright Free Music (128 kbps).mp3`);
+        const audio3 = new Audio(`audio/vinee-heights-126947.mp3`);
+        const audio4 = new Audio(`audio/downfall-21371.mp3`);
+        const audio5 = new Audio(`audio/tremoxbeatz-at-home-in-wendyx27s-restaurant-sad-rap-melodie-173875.mp3`);
+        const audio6 = new Audio(`audio/speed-122837.mp3`);
+        const audio7 = new Audio(`audio/silicon-valley-123990.mp3`);
+        const audio8 = new Audio(`audio/keep-moving-on-136341.mp3`);
+        const audio9 = new Audio(`audio/yo-kid-123499.mp3`);
+        const audio10 = new Audio(`audio/Audio9.mp3`);
+        const songImage = document.querySelector(".song-img");
+
+        //images
+
+        const img1 = `img/audio1.jpg`;
+        const img2 = `img/audio2.jpg`;
+        const img3 = `img/audio3.jpg`;
+        const img4 = `img/audio4.jpg`;
+        const img5 = `img/audio5.jpg`;
+        const img6 = `img/audio6.jpg`;
+        const img7 = `img/audio7.jpg`;
+        const img8 = `img/audio8.jpg`;
+        const img9 = `img/audio9.jpg`;
+
+
+
+        const songs = [
+            { ele: audio2, audioName: `Disfigure - Blank  `, img: img1 },
+            { ele: audio3, audioName: `vinee-heights`, img: img2 },
+            { ele: audio4, audioName: `downfall-21371`, img: img3 },
+            { ele: audio5, audioName: `tremoxbeatz-at-home...`, img: img4 },
+            { ele: audio6, audioName: `speed-122837.mp3`, img: img5 },
+            { ele: audio7, audioName: `silicon-valley-123990.mp3`, img: img6 },
+            { ele: audio8, audioName: `keep-moving-on-136341`, img: img7 },
+            { ele: audio9, audioName: `yo-kid-123499`, img: img8 },
+            {ele:audio10, audioName:`Amra Kene Babu...`, img:img9}
+
+        ];
+
+        //buttons
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let ctrlIcon = document.getElementById("ctrlIcon");
+        let previous = document.getElementById("previous");
+        let next = document.getElementById("next");
+
+
+
+        let songName = document.getElementById("songName");
+        let songDuration = document.getElementById("duration");
+        let currentTime = document.getElementById("currentTime");
+
+
+
+
+
+        let current = 0;
+        let currentsong = songs[current].ele;
+        updateSongImage();
+        function playNextSong() {
+            currentsong.pause();
+            currentsong.currentTime = 0;
+            current++;
+
+
+            if (current > songs.length - 1) current = 0;
+
+            currentsong = songs[current].ele;
+            songName.textContent = songs[current].audioName;
+
+
+            updateSongImage()
+            songImage.classList.remove("rotating");
+
+            song.onloadedmetadata = function () {
+                progress.max = currentsong.duration;
+            }
+
+            currentsong.play();
+            let durationMinutes = Math.floor(currentsong.duration / 60);
+            let durationSeconds = Math.floor(currentsong.duration % 60);
+            songDuration.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+
+
+
+
+            currentsong.addEventListener('timeupdate', function () {
+                const elapsedMinutes = Math.floor(currentsong.currentTime / 60);
+                const elapsedSeconds = Math.floor(currentsong.currentTime % 60);
+                currentTime.textContent = `${elapsedMinutes}:${elapsedSeconds.toString().padStart(2, '0')}`;
+
+
+
+            });
+
+        }
+
+
+        currentsong.addEventListener('ended', playNextSong);
+
+
+        function updateSongImage() {
+            const currentImage = songs[current].img;
+            songImage.src = currentImage;
+        }
+
+
+
+
+
+        ctrlIcon.addEventListener('click', playPause);
+        song.onloadedmetadata = function () {
+            progress.max = currentsong.duration;
+            progress.value = song.currentTime;
+            songName.textContent = songs[current].audioName;
+
+
+
+            next.addEventListener('click', () => {
+
+                updateSong('next');
+                playPause()
+                let durationMinutes = Math.floor(currentsong.duration / 60);
+                let durationSeconds = Math.floor(currentsong.duration % 60);
+                songDuration.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+                progress.max = currentsong.duration;
+                ctrlIcon.classList.remove("fa-play");
+                ctrlIcon.classList.add("fa-pause");
+
+                songImage.classList.remove("rotating");
+            })
+            previous.addEventListener('click', () => {
+                updateSong('prev');
+                playPause();
+                ctrlIcon.classList.remove("fa-play");
+                ctrlIcon.classList.add("fa-pause");
+                songImage.classList.remove("rotating");
+            })
+        }
+        function playPause() {
+            if (ctrlIcon.classList.contains("fa-pause")) {
+                currentsong.pause();
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+                songImage.classList.add("rotating");
+                progress.max = currentsong.duration;
+                progress.value = currentsong.currentTime;
+            }
+
+            else {
+                currentsong.play();
+                ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+                songImage.classList.remove("rotating");
+            }
+        }
+        if (currentsong.play()) {
+            setInterval(() => {
+                progress.value = currentsong.currentTime;
+            }, 500);
+
+        }
+        progress.onchange = function () {
+            currentsong.play();
+            currentsong.currentTime = progress.value;
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+        if (progress.value == progress.max) {
+            ctrlIcon.classList.remove("fa-pause");
+            ctrlIcon.classList.add("fa-play");
+        }
+        const updateSong = (action) => {
+            currentsong.pause();
+            currentsong.currentTime = 0;
+            if (action === 'next') {
+                current++;
+                if (current > songs.length - 1) current = 0;
+            }
+            if (action === 'prev') {
+                current--;
+                if (current < 0) current = songs.length - 1;
+            }
+
+            currentsong = songs[current].ele;
+            songName.textContent = songs[current].audioName;
+            updateSongImage();
+            currentsong.addEventListener('ended', playNextSong);
+
+
+
+            currentsong.addEventListener("loadedmetadata", function () {
+                let durationMinutes = Math.floor(currentsong.duration / 60);
+                let durationSeconds = Math.floor(currentsong.duration % 60);
+                songDuration.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+
+            });
+
+            next.addEventListener("click", function () {
+                let durationMinutes = Math.floor(currentsong.duration / 60);
+                let durationSeconds = Math.floor(currentsong.duration % 60);
+                songDuration.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+                currentsong.play();
+
+            });
+
+            previous.addEventListener("click", function () {
+                let durationMinutes = Math.floor(currentsong.duration / 60);
+                let durationSeconds = Math.floor(currentsong.duration % 60);
+                songDuration.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+                currentsong.play();
+            });
+
+
+            currentsong.addEventListener('timeupdate', function () {
+                const elapsedMinutes = Math.floor(currentsong.currentTime / 60);
+                const elapsedSeconds = Math.floor(currentsong.currentTime % 60);
+                currentTime.textContent = `${elapsedMinutes}:${elapsedSeconds.toString().padStart(2, '0')}`;
+            });
+
+        }
+        currentsong.addEventListener("loadedmetadata", (event) => {
+            let durationMinutes = Math.floor(currentsong.duration / 60);
+            let durationSeconds = Math.floor(currentsong.duration % 60);
+            songDuration.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+            currentsong.pause()
+            songImage.classList.add("rotating");
+        });
+        currentsong.addEventListener('timeupdate', () => {
+            const elapsedMinutes = Math.floor(currentsong.currentTime / 60);
+            const elapsedSeconds = Math.floor(currentsong.currentTime % 60);
+            currentTime.textContent = `${elapsedMinutes}:${elapsedSeconds.toString().padStart(2, '0')}`;
+        });
+
+    </script>
+</body>
+
+</html>
